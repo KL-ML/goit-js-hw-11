@@ -1,7 +1,5 @@
 import axios from "axios";
 import './css/styles.css';
-import { debounce } from "lodash";
-import API from './fetchImages';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const searchForm = document.querySelector('#search-form');
@@ -10,13 +8,39 @@ gallery.style.cssText += 'list-style-type:none;display:flex;flex-wrap:wrap;gap:4
 console.log(searchForm);
 searchForm.addEventListener('submit', onSubmitForm);
 
+const axios = require('axios').default;
+const BASE_URL = `https://pixabay.com/api/`;
+const API_KEY = `30636701-b7bfaf1719dc5d89c8acde7b5`;
+
+const fetchImages = async (name) => {
+    const searchParams = new URLSearchParams({
+        key: API_KEY,
+        q: name,
+        image_type: "photo",
+        orientation: "horizontal",
+        safesearch: true,
+        per_page: 40,
+    });
+    const url = `${BASE_URL}?${searchParams}`;
+    try {
+        const response = await axios.get(url);
+        const images = response.data;
+        console.log(images);
+        if (!images.ok) {
+            Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        }
+        return images;
+    } catch (errors) {
+        console.error(errors);
+    }
+}
+
 function onSubmitForm(event) {
     event.preventDefault();
-    // console.log(event.target.elements[0].value);
     const inputValue = event.target.elements[0].value.trim();
     console.log(inputValue);
     if (inputValue !== '') {
-        API.fetchImages(inputValue)
+        fetchImages(inputValue)
         .then(renderGallery)
         .catch((error) => console.log(error));
     }
