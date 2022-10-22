@@ -8,7 +8,7 @@ gallery.style.cssText += 'list-style-type:none;display:flex;flex-wrap:wrap;gap:4
 console.log(searchForm);
 searchForm.addEventListener('submit', onSubmitForm);
 
-const axios = require('axios').default;
+// const axios = require('axios').default;
 const BASE_URL = `https://pixabay.com/api/`;
 const API_KEY = `30636701-b7bfaf1719dc5d89c8acde7b5`;
 
@@ -26,12 +26,14 @@ const fetchImages = async (name) => {
         const response = await axios.get(url);
         const images = response.data;
         console.log(images);
-        if (!images.ok) {
-            Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-        }
         return images;
     } catch (errors) {
         console.error(errors);
+        Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        
+        // if (!images.ok) {
+        //     Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        // }
     }
 }
 
