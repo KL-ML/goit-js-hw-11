@@ -1,55 +1,84 @@
 import axios from "axios";
 import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import ImagesApiService from './images-seach';
+import LoadMoreBtn from "./load-more-btn";
 
 const searchForm = document.querySelector('#search-form');
+// const loadMoreBtn = document.querySelector('.load-more');
 const gallery = document.querySelector('.gallery');
 gallery.style.cssText += 'list-style-type:none;display:flex;flex-wrap:wrap;gap:40px;';
-console.log(searchForm);
-searchForm.addEventListener('submit', onSubmitForm);
 
-// const axios = require('axios').default;
-const BASE_URL = `https://pixabay.com/api/`;
-const API_KEY = `30636701-b7bfaf1719dc5d89c8acde7b5`;
-
-const fetchImages = async (name) => {
-    const searchParams = new URLSearchParams({
-        key: API_KEY,
-        q: name,
-        image_type: "photo",
-        orientation: "horizontal",
-        safesearch: true,
-        per_page: 40,
-    });
-    const url = `${BASE_URL}?${searchParams}`;
-    try {
-        const response = await axios.get(url);
-        const images = response.data;
-        console.log(images);
-        return images;
-    } catch (errors) {
-        console.error(errors);
-        Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+// const BASE_URL = `https://pixabay.com/api/`;
+// const API_KEY = `30636701-b7bfaf1719dc5d89c8acde7b5`;
+// const API_PAGE = 1;
         
-        // if (!images.ok) {
-        //     Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-        // }
-    }
-}
+
+const imagesApiService = new ImagesApiService();
+const loadMoreBtn = new LoadMoreBtn({
+    selector: '.load-more',
+    
+});
+
+// console.log(loadMoreBtn);
+searchForm.addEventListener('submit', onSubmitForm);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+
+
+// async function fetchImages(name) {
+//     console.log(name);
+//     const searchParams = new URLSearchParams({
+//         key: API_KEY,
+//         q: name,
+//         image_type: "photo",
+//         orientation: "horizontal",
+//         safesearch: true,
+//         page: API_PAGE,
+//         per_page: 40,
+//     });
+//     const url = `${BASE_URL}?${searchParams}`;
+
+//     try {
+//         const response = await axios.get(url);
+//         console.log(response);
+//         const images = response.data;
+//         if (images.total === 0) {
+//             Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+//         }
+//         console.log(images);
+//         return images;
+
+//     } catch (errors) {
+//         console.error(errors);
+//         Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+//     }
+// }
 
 function onSubmitForm(event) {
     event.preventDefault();
-    const inputValue = event.target.elements[0].value.trim();
-    console.log(inputValue);
-    if (inputValue !== '') {
-        fetchImages(inputValue)
-        .then(renderGallery)
-        .catch((error) => console.log(error));
+    clearGalleryContainer();
+    imagesApiService.reserPage();
+    imagesApiService.query = event.target.elements[0].value.trim();
+    // const inputValue = event.target.elements[0].value.trim();
+    // console.log(imagesApiService.query);
+    // if (inputValue !== '') {
+    //     fetchImages(inputValue)
+    if (imagesApiService.query === '') { 
+        Notify.failure("Please enter search query.");
+    } else {
+        imagesApiService.fetchImages(imagesApiService.searchImgQuery)
+        .then(renderGallery);
     }
     gallery.innerHTML = "";
 }
+function onLoadMore() {
+    imagesApiService.fetchImages(imagesApiService.searchImgQuery)
+        .then(renderGallery);
+    console.log('button click');
+}
 function renderGallery(images) {
-    gallery.innerHTML = "";
+    console.log(images);
+
     const markup = images.hits
         .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
             return `<div class="photo-card">
@@ -72,6 +101,9 @@ function renderGallery(images) {
         })
         .join("");
     gallery.insertAdjacentHTML('beforeend', markup);
+}
+function clearGalleryContainer() {
+    gallery.innerHTML = "";
 }
 
 
