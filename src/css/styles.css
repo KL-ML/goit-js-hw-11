@@ -54,3 +54,13 @@ body {
 .gallery {
   margin-top: 50px;
 }
+.load-more {
+  width: 200px;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  background-color: #d3d3d3;
+}
+.load-more.is-hidden {
+  display: none;
+}
