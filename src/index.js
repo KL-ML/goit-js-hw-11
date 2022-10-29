@@ -34,12 +34,13 @@ function onClickFetch() {
         .then(images => {
             renderGallery(images);
             if (imagesApiService.pageNumber - 1 === Math.ceil(images.totalHits / 40)) {
-                Notify.failure("We're sorry, but you've reached the end of search results.");
+                Notify.info("We're sorry, but you've reached the end of search results.");
                 loadMoreBtn.hide();
             } else if (images.total === 0) {
-                Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+                Notify.info("Sorry, there are no images matching your search query. Please try again.");
                 loadMoreBtn.hide();
             } else {
+            Notify.success(`Hooray! We found ${images.totalHits} images.`);
             loadMoreBtn.show();
             loadMoreBtn.enable();}
         })
