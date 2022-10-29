@@ -3,6 +3,8 @@ import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import ImagesApiService from './images-seach';
 import LoadMoreBtn from "./load-more-btn";
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
@@ -50,7 +52,7 @@ function renderGallery(images) {
     const markup = images.hits
         .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
             return `<div class="photo-card">
-                        <a class="img-link">
+                        <a href="${largeImageURL}" class="img-link">
                             <img src="${webformatURL}" alt="${tags}" height=200px; loading="lazy" />
                         </a>
                         <div class="info">
