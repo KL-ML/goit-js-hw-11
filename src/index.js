@@ -4,11 +4,14 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import ImagesApiService from './images-seach';
 import LoadMoreBtn from "./load-more-btn";
 import SimpleLightbox from "simplelightbox";
+// import SimpleLightbox from "simplelightbox/dist/simple-lightbox.esm";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
 const searchForm = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
 
+const gallerySimpleLightbox = new SimpleLightbox('div.gallery a');
+gallerySimpleLightbox.refresh();
 const imagesApiService = new ImagesApiService();
 const loadMoreBtn = new LoadMoreBtn({
     selector: '.load-more',
@@ -44,14 +47,18 @@ function onClickFetch() {
             } else {
             Notify.success(`Hooray! We found ${images.totalHits} images.`);
             loadMoreBtn.show();
-            loadMoreBtn.enable();}
+            loadMoreBtn.enable();
+            const gallerySimpleLightbox = new SimpleLightbox('div.gallery a');
+                gallerySimpleLightbox.refresh();
+            }
         })
         .catch((errore) => console.log(errore));
 }
 function renderGallery(images) {
     const markup = images.hits
         .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-            return `<div class="photo-card">
+            return `
+                        <div class="photo-card">
                         <a href="${largeImageURL}" class="img-link">
                             <img src="${webformatURL}" alt="${tags}" height=200px; loading="lazy" />
                         </a>
@@ -69,7 +76,8 @@ function renderGallery(images) {
                                 <b>Downloads </b>${downloads}
                             </p>
                         </div>
-                    </div>`;
+                        </div>
+                    `;
         })
         .join("");
     gallery.insertAdjacentHTML('beforeend', markup);
@@ -77,6 +85,10 @@ function renderGallery(images) {
 function clearGalleryContainer() {
     gallery.innerHTML = "";
 }
+// new SimpleLightbox('div.gallery a');
+// // const myGallery = $('div.gallery a').simpleLightbox();
+
+// gallery.refresh();
 
 
 
