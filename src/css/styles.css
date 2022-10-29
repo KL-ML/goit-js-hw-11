@@ -105,6 +105,8 @@ body {
   flex-direction: column;
 }
 .img-link {
+  text-decoration: none;
+  color: inherit;
   cursor: pointer;
 }
 .load-more {
