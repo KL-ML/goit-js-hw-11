@@ -14,13 +14,13 @@ export default class LoadMoreBtn {
 
     enable() {
         this.refs.button.disabled = false;
-        // this.refs.label.textContent = 'Показати ще';
+        this.refs.button.textContent = 'Load more';
         // this.refs.spinner.classList.add('is-hidden');
     }
 
     disabled() {
         this.refs.button.disabled = true;
-        // this.refs.label.textContent = 'Завантажуєм...';
+        this.refs.button.textContent = 'loading...';
         // this.refs.spinner.classList.remove('is-hidden');
     }
     show() {
