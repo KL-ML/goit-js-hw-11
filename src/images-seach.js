@@ -28,10 +28,6 @@ export default class ImagesApiService {
         try {
             const response = await axios.get(url);
             const images = response.data;
-            // if (images.total === 0) {
-            //     Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-            //     loadMoreBtn.hide();
-            // }
             this.incrementPage();
             return images;
 
