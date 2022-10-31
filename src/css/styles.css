@@ -34,6 +34,7 @@ body {
   background-color: rgb(88, 103, 187);
   /* box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px; */
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  z-index: 10;
 }
 .search-form {
   position: relative;
@@ -49,7 +50,7 @@ body {
   padding-left: 10px;
   background-image: linear-gradient(to right,
         #fafafa00 87%,
-        rgba(155, 157, 180, 0.468) 13%);
+        #9b9db477 13%);
   font-size: inherit;
   color: inherit;
   box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
@@ -68,6 +69,26 @@ body {
   color: inherit;
   font-size: inherit;
 }
+.search-icon {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 17px;
+  height: 17px;
+  fill: #35343498;
+
+  transition: transform, fill;
+  transition-duration: 300ms;
+}
+.search-button:hover .search-icon,
+.search-button:focus .search-icon {
+  transform: scale(1.15);
+  /* top: 6px;
+  right: 6px;
+  width: 19px;
+  height: 19px; */
+  fill: #353434ab;
+}
 .gallery {
   display: flex;
   align-items: center;
@@ -80,11 +101,16 @@ body {
 }
 .photo-card {
   height: 280px;
-  width: 330px;
+  width: 320px;
   overflow: hidden;
-  /* border: solid rgba(137, 130, 130, 0.389) 1px; */
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 3px;
+  transition: transform;
+  transition-duration: 300ms;
+}
+.photo-card:hover,
+.photo-card:focus {
+  transform: scale(1.05);
 }
 .photo-card img {
   display: block;
